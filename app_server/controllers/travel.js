@@ -1,5 +1,5 @@
 // Get Travel View
-const travel = (rez, res) => {
+const travel = (req, res) => {
     res.render('travel', {title: 'Travlr Getaways'});
 };
 module.exports = {
