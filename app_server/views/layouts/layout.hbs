@@ -5,6 +5,23 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
+
+    {{> header}}
+    {{#if auth}}
+  {{#if (eq auth.role "admin")}}
+    <div style="background:#222;color:#fff;padding:8px 12px;">
+      Admin mode:
+      <a href="/admin" style="color:#7fd1ff;font-weight:bold;">
+        Switch to Admin SPA
+      </a>
+    </div>
+  {{/if}}
+{{/if}}
+
+
     {{{body}}}
+
+    {{> footer}}
+
   </body>
 </html>

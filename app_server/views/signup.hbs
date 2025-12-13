@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up | {{title}}</title>
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="background">
+    <div id="page">
+
+      {{> header}}
+
+      <div id="contents">
+        <div class="box">
+          <div>
+            <div class="body">
+              <h1>Create an Account</h1>
+
+              {{#if error}}
+                <p style="color:red">{{error}}</p>
+              {{/if}}
+
+              <form method="post" action="/signup">
+                <p>
+                  <label>Name</label><br>
+                  <input type="text" name="name" required>
+                </p>
+
+                <p>
+                  <label>Email</label><br>
+                  <input type="email" name="email" required>
+                </p>
+
+                <p>
+                  <label>Password</label><br>
+                  <input type="password" name="password" required>
+                </p>
+
+                <p>
+                  <button type="submit">Create Account</button>
+                </p>
+              </form>
+
+              <p>
+                Already have an account?
+                <a href="/login"><strong>Log in here</strong></a>
+              </p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{> footer}}
+
+    </div>
+  </div>
+</body>
+</html>

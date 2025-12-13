@@ -1,35 +1,105 @@
 <!DOCTYPE html>
-<!-- Website template by freewebsitetemplates.com -->
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Dive Sites - Bhaccasyoniztas Beach Resort Website Template</title>
-	<link rel="stylesheet" href="css/style.css" type="text/css">
+  <meta charset="UTF-8">
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
 </head>
+
 <body>
-	<div id="background">
-		<div id="page">
-			{{> header }}
-			<div id="contents">
-				<div class="box">
-					<div>
-						<div class="body">
-							<h1>Travel</h1>
-							<ul id="sites">
-			{{#each trips}}		
-								<li>
-										<a href="/api/trips/{{this.code}}"><img src="images/{{this.image}}" alt="Img"</a>
-										<h2><a href="/travel">{{this.name}}</a></h2>
-										{{{this.description}}}
-								</li>
-			{{/each}}
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		{{> footer }}
-	</div>
+  <div id="background">
+    <div id="page">
+
+      {{> header}}
+
+      <div id="contents">
+        <div class="box">
+          <div>
+            <div class="body">
+              <h1>Travel</h1>
+
+              <ul id="sites">
+                {{#each trips}}
+                  <li>
+                    <!-- Click image to reserve -->
+                    <a href="#" class="reserve-link" data-code="{{this.code}}" data-name="{{this.name}}">
+                      <img src="/images/{{this.image}}" alt="Img">
+                    </a>
+
+                    <h2><a href="/travel">{{this.name}}</a></h2>
+                    {{{this.description}}}
+                  </li>
+                {{/each}}
+              </ul>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{> footer}}
+
+    </div>
+  </div>
+
+  <!-- Reserve Modal -->
+  <div id="reserveModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:9999;">
+    <div style="max-width:520px; margin:10% auto; background:#fff; padding:20px; border-radius:8px;">
+      <h2 style="margin-top:0;">Reserve Destination</h2>
+      <p id="reserveModalText">Are you sure?</p>
+
+      <div style="margin-top:16px;">
+        <button id="reserveConfirmBtn" type="button">Yes, reserve</button>
+        <button id="reserveCancelBtn" type="button" style="margin-left:10px;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const modal = document.getElementById('reserveModal');
+      const text = document.getElementById('reserveModalText');
+      const confirmBtn = document.getElementById('reserveConfirmBtn');
+      const cancelBtn = document.getElementById('reserveCancelBtn');
+
+      let selectedTripCode = null;
+
+      function openModal(tripName, tripCode) {
+        selectedTripCode = tripCode;
+        text.textContent = `Are you sure you want to reserve "${tripName}"?`;
+        modal.style.display = 'block';
+      }
+
+      function closeModal() {
+        selectedTripCode = null;
+        modal.style.display = 'none';
+      }
+
+      document.querySelectorAll('.reserve-link').forEach(a => {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          openModal(a.dataset.name, a.dataset.code);
+        });
+      });
+
+      cancelBtn.addEventListener('click', closeModal);
+
+      // click outside dialog box closes
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      confirmBtn.addEventListener('click', () => {
+        if (!selectedTripCode) return;
+
+        // Submits POST to server 
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/reservations/${encodeURIComponent(selectedTripCode)}`;
+        document.body.appendChild(form);
+        form.submit();
+      });
+    })();
+  </script>
 </body>
 </html>
