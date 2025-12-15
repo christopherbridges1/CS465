@@ -4,7 +4,8 @@ Architecture
 
 Compare and contrast the types of frontend development you used in your full stack project, including Express HTML, JavaScript, and the single-page application (SPA).
 The different front end styles were used to perform different actions. Angular works well for dynamic content than can be refreshed and displayed instantly. Express is better for server rendered pages 
-Why did the backend use a NoSQL MongoDB database?
+**
+Why did the backend use a NoSQL MongoDB database?**
 
 
 Functionality
