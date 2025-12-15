@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Reservations | {{title}}</title>
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+    <div id="background">
+        <div id="page">
+
+            {{> header}}
+
+            <div id="contents">
+                <div class="box">
+                    <div>
+                        <div class="body">
+                            <h1>My Reservations</h1>
+
+                            {{#if reservations.length}}
+                            <ul>
+                                {{#each reservations}}
+                                <li style="margin-bottom: 16px;">
+                                    <strong>{{trip.name}}</strong> ({{trip.code}})<br>
+                                    {{trip.length}}<br>
+                                    {{trip.resort}}<br>
+                                    ${{trip.perPerson}} per person<br>
+                                    Party size: {{partySize}}<br>
+                                    Status: {{status}}
+                                </li>
+                                {{/each}}
+                            </ul>
+
+                            {{else}}
+                            <p>You don’t have any reservations yet.</p>
+                            <p>
+                                Browse our <a href="/travel"><strong>travel destinations</strong></a>
+                                to get started.
+                            </p>
+                            {{/if}}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{> footer}}
+
+        </div>
+    </div>
+</body>
+
+</html>

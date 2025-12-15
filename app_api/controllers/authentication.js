@@ -30,34 +30,27 @@ const login = (req, res) => {
     })(req, res);
 };
 
-const register = async(req, res) => {
-    if (!req.body.name || !req.body.email || !req.body.password) {
-        return res
-            .status(400)
-            .json({"message": "All fields required"});
-}
+const register = async (req, res) => {
+  if (!req.body.name || !req.body.email || !req.body.password) {
+    return res.status(400).json({ message: "All fields required" });
+  }
 
-    const user = new User(
-        {
-            name: req.body.name,
-            email: req.body.email,
-            password: ''
-        });
-    
-    user.setPassword(req.body.password)
-    const q = await user.save();
+  try {
+    const user = new User({
+      name: req.body.name,
+      email: req.body.email,
+      // role will default to "user" from schema
+      // role: "user"
+    });
 
-    if(!q)
-    {
-        return res
-            .status(400)
-            .json(err);
-    }   else {
-        const token = user.generateJWT();
-        return res
-            .status(200)
-            .json(token);
-    }
+    user.setPassword(req.body.password);
+    await user.save();
+
+    const token = user.generateJWT();
+    return res.status(200).json({ token });
+  } catch (err) {
+    return res.status(400).json(err);
+  }
 };
 
 module.exports = {

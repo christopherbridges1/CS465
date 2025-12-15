@@ -15,9 +15,11 @@ var app = express();
 // Wire in our authentication module
 var passport = require('passport');
 require('./app_api/config/passport');
-
-require('./app_api/models/db');
 require('dotenv').config();
+require('./app_api/models/db');
+
+const hbs = require('hbs');
+hbs.registerHelper('eq', (a, b) => a === b);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app_server', 'views'));
@@ -43,11 +45,30 @@ app.use('/api', (req,res,next) => {
   next();
 });
 
+const jwt = require("jsonwebtoken");
+
+app.use((req, res, next) => {
+  const token = req.cookies?.jwt;
+  if (!token) return next();
+
+  try {
+    req.auth = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (e) {
+    res.clearCookie("jwt");
+  }
+  next();
+});
+
+app.use((req, res, next) => {
+  res.locals.auth = req.auth || null;
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/travel', travelRouter);
 app.use('/api', apiRouter);
+app.get('/index.html', (req, res) => res.redirect('/'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
